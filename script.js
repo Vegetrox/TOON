@@ -785,11 +785,25 @@ function redo() {
   rebindElements(); deselectAll(); hideLock(); showToast('Refait')
 }
 function rebindElements() {
-  container.querySelectorAll('.text-bubble,.image-block,.panel-block,.plain-text-block').forEach(el=>makeInteractive(el))
-  container.querySelectorAll('.el-lock-float').forEach(b=>b.remove())
-  if(!container.querySelector('#marquee')) container.appendChild(marquee)
-  if(!container.querySelector('.canvas-resize-handle')) container.appendChild(canvasResizeHandle)
-  if(!container.querySelector('.canvas-height-label')) container.appendChild(canvasHeightLabel)
+  container.querySelectorAll('.text-bubble,.image-block,.panel-block,.plain-text-block').forEach(el => {
+    // Remove stale resize handles saved in HTML (no events attached)
+    el.querySelectorAll('.resize-handle').forEach(h => h.remove())
+    // Re-add resize handles for bubbles and panels
+    if (el.classList.contains('text-bubble') || el.classList.contains('panel-block')) {
+      addResizeHandles(el)
+    }
+    if (el.classList.contains('image-block')) {
+      addResizeHandles(el)
+    }
+    // Re-bind all interactions (drag, dblclick, contextmenu)
+    makeInteractive(el)
+  })
+  // Clean up any stale floating lock buttons
+  container.querySelectorAll('.el-lock-float').forEach(b => b.remove())
+  // Restore canvas utilities if wiped by innerHTML reset
+  if (!container.querySelector('#marquee')) container.appendChild(marquee)
+  if (!container.querySelector('.canvas-resize-handle')) container.appendChild(canvasResizeHandle)
+  if (!container.querySelector('.canvas-height-label')) container.appendChild(canvasHeightLabel)
 }
 
 /* ─── KEYBOARD ───────────────────────── */
