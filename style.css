@@ -587,9 +587,9 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  overflow-y: scroll;   /* always show scrollbar so layout is stable */
+  overflow-y: scroll;
   overflow-x: auto;
-  padding: 32px;
+  padding: 32px 32px 32px 340px;  /* extra left padding for staging area */
   background: var(--bg-main);
   scroll-behavior: smooth;
 }
@@ -616,10 +616,12 @@ body {
 .canvas-wrapper {
   transform-origin: top center;
   transition: transform 0.15s ease;
-  /* Ensures the wrapper grows with canvas height so scrollbar is active */
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* Extra left space so staged elements (negative left) are visible */
+  padding-left: 320px;
+  margin-left: -320px;
 }
 
 #webtoon-container {
@@ -748,6 +750,9 @@ body {
   z-index: 2;
   width: 100%;
   outline: none;
+  padding: 14% 16%;   /* generous inset — keeps text away from stroke on all proportions */
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .text-bubble.locked {
