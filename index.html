@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webtoon Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Bangers&family=Comic+Neue:wght@400;700&family=Boogaloo&family=Permanent+Marker&family=Fredoka+One&family=Lilita+One&family=Caveat:wght@400;700&family=Rubik:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── LOGIN OVERLAY ─────────────────────────────────────── -->
+  <div id="loginOverlay">
+    <div class="login-card">
+      <div class="login-logo">
+        <span class="login-logo-icon">◈</span>
+        <div class="login-logo-text">
+          <span>Webtoon</span>
+          <strong>Studio</strong>
+        </div>
+      </div>
+      <p class="login-subtitle">Espace de création privé</p>
+      <div class="login-field">
+        <input
+          type="password"
+          id="loginInput"
+          placeholder="Mot de passe"
+          autocomplete="current-password"
+          spellcheck="false"
+        >
+        <button id="loginBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <p class="login-error" id="loginError"></p>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">◈</span>
+      <span class="logo-text">Webtoon<br><strong>Studio</strong></span>
+    </div>
+
+    <div class="sidebar-section">
+      <span class="sidebar-label">Ajouter</span>
+      <button class="tool-btn" id="addText" title="Ajouter un texte">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7V5h16v2M9 5v14m6-14v14M9 19h6"/></svg>
+        <span>Texte</span>
+      </button>
+      <button class="tool-btn" id="addBubble" title="Bulle de dialogue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Bulle</span>
+      </button>
+      <button class="tool-btn" id="addImage" title="Importer une image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+        <span>Image</span>
+      </button>
+      <button class="tool-btn" id="addPanel" title="Ajouter un panneau">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>
+        <span>Panneau</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <span class="sidebar-label">Bulle style</span>
+      <div class="bubble-styles">
+        <button class="bubble-style-btn active" data-style="round" title="Bulle ronde">
+          <svg viewBox="0 0 48 32" fill="none">
+            <path d="M24,2 C34,2 46,7 46,16 C46,25 35,30 24,30 C13,30 2,25 2,16 C2,7 14,2 24,2 Z" fill="white" stroke="currentColor" stroke-width="1.3"/>
+          </svg>
+          <span>Ronde</span>
+        </button>
+        <button class="bubble-style-btn" data-style="rect" title="Bulle rectangle">
+          <svg viewBox="0 0 48 32" fill="none">
+            <path d="M8,2 C3,2 2,3 2,8 L2,24 C2,29 3,30 8,30 L40,30 C45,30 46,29 46,24 L46,8 C46,3 45,2 40,2 Z" fill="white" stroke="currentColor" stroke-width="1.3"/>
+          </svg>
+          <span>Rect.</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <span class="sidebar-label">Édition</span>
+      <button class="tool-btn" id="undoBtn" title="Annuler (Ctrl+Z)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>
+        <span>Annuler</span>
+      </button>
+      <button class="tool-btn" id="redoBtn" title="Refaire (Ctrl+Y)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 14l5-5-5-5"/><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5V15a5.5 5.5 0 0 0 5.5 5.5H13"/></svg>
+        <span>Refaire</span>
+      </button>
+      <button class="tool-btn danger" id="deleteBtn" title="Supprimer (Suppr)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+        <span>Supprimer</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <span class="sidebar-label">Vue</span>
+      <div class="zoom-control">
+        <button class="zoom-btn" id="zoomOut">−</button>
+        <span class="zoom-value" id="zoomValue">100%</span>
+        <button class="zoom-btn" id="zoomIn">+</button>
+      </div>
+      <button class="tool-btn" id="toggleGrid" title="Afficher/Masquer la grille">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+        <span>Grille</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <span class="sidebar-label">Exporter</span>
+      <button class="tool-btn export" id="exportPNG" title="Exporter en PNG">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        <span>PNG</span>
+      </button>
+      <button class="tool-btn export" id="exportPDF" title="Exporter en PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M9 15h6M9 11h6M9 19h4"/></svg>
+        <span>PDF</span>
+      </button>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="supabase-status" id="supabaseStatus">
+        <span class="status-dot"></span>
+        <span class="status-text">DB non connectée</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- PROPERTIES PANEL -->
+  <div class="properties-panel" id="propertiesPanel">
+    <div class="prop-header">
+      <span>Propriétés</span>
+      <button class="prop-close" id="closePropPanel">×</button>
+    </div>
+    <div class="prop-body">
+      <div class="prop-group">
+        <label>Opacité</label>
+        <div class="prop-row">
+          <input type="range" id="propOpacity" min="0" max="100" value="100">
+          <span class="prop-val" id="propOpacityVal">100%</span>
+        </div>
+      </div>
+      <div class="prop-group" id="propColorGroup">
+        <label>Couleur fond / bord</label>
+        <div class="prop-row">
+          <input type="color" id="propBgColor" value="#ffffff">
+          <input type="color" id="propBorderColor" value="#000000">
+          <span style="font-size:11px;color:#888">fond / bord</span>
+        </div>
+      </div>
+      <div class="prop-group" id="propPanelColorGroup" style="display:none">
+        <label>Couleur fond / bord</label>
+        <div class="prop-row">
+          <input type="color" id="propPanelBgColor" value="#ffffff">
+          <input type="color" id="propPanelBorderColor" value="#1a1a1a">
+          <span style="font-size:11px;color:#888">fond / bord</span>
+        </div>
+      </div>
+      <div class="prop-group" id="propTextGroup">
+        <label>Couleur &amp; taille</label>
+        <div class="prop-row">
+          <input type="color" id="propTextColor" value="#000000">
+          <select id="propFontSize">
+            <option value="11px">11</option>
+            <option value="12px">12</option>
+            <option value="14px" selected>14</option>
+            <option value="16px">16</option>
+            <option value="18px">18</option>
+            <option value="20px">20</option>
+            <option value="24px">24</option>
+            <option value="28px">28</option>
+            <option value="32px">32</option>
+            <option value="40px">40</option>
+            <option value="48px">48</option>
+          </select>
+          <select id="propFontWeight">
+            <option value="400">Normal</option>
+            <option value="600">Semi-bold</option>
+            <option value="700">Bold</option>
+          </select>
+        </div>
+      </div>
+      <div class="prop-group" id="propFontGroup">
+        <label>Typographie</label>
+        <div class="font-picker">
+          <button class="font-btn active" data-font="DM Sans" style="font-family:'DM Sans'">
+            <span class="font-preview">Aa</span>
+            <span class="font-name">DM Sans</span>
+            <span class="font-tag">défaut</span>
+          </button>
+          <button class="font-btn" data-font="Bangers" style="font-family:'Bangers'">
+            <span class="font-preview">Aa</span>
+            <span class="font-name">Bangers</span>
+            <span class="font-tag">cri / titre</span>
+          </button>
+          <button class="font-btn" data-font="Comic Neue" style="font-family:'Comic Neue'">
+            <span class="font-preview">Aa</span>
+            <span class="font-name">Comic Neue</span>
+            <span class="font-tag">BD classique</span>
+          </button>
+          <button class="font-btn" data-font="Boogaloo" style="font-family:'Boogaloo'">
+            <span class="font-preview">Aa</span>
+            <span class="font-name">Boogaloo</span>
+            <span class="font-tag">décontracté</span>
+          </button>
+          <button class="font-btn" data-font="Permanent Marker" style="font-family:'Permanent Marker'">
+            <span class="font-preview">Aa</span>
+            <span class="font-name">Permanent Marker</span>
+            <span class="font-tag">feutre / apart</span>
+          </button>
+          <button class="font-btn" data-font="Fredoka One" style="font-family:'Fredoka One'">
+            <span class="font-preview">Aa</span>
+            <span class="font-name">Fredoka One</span>
+            <span class="font-tag">kawaii / manga</span>
+          </button>
+          <button class="font-btn" data-font="Lilita One" style="font-family:'Lilita One'">
+            <span class="font-preview">Aa</span>
+            <span class="font-name">Lilita One</span>
+            <span class="font-tag">expressif / gras</span>
+          </button>
+          <button class="font-btn" data-font="Caveat" style="font-family:'Caveat'">
+            <span class="font-preview">Aa</span>
+            <span class="font-name">Caveat</span>
+            <span class="font-tag">manuscrit</span>
+          </button>
+          <button class="font-btn" data-font="Rubik" style="font-family:'Rubik'">
+            <span class="font-preview">Aa</span>
+            <span class="font-name">Rubik</span>
+            <span class="font-tag">lisible / propre</span>
+          </button>
+        </div>
+      </div>
+      <div class="prop-group">
+        <label>Ordre (z-index)</label>
+        <div class="prop-row">
+          <button class="z-btn" id="bringFront" title="Premier plan">▲ Avant</button>
+          <button class="z-btn" id="sendBack" title="Arrière plan">▼ Arrière</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN AREA -->
+  <main class="main-area">
+    <div class="canvas-wrapper" id="canvasWrapper">
+      <div id="webtoon-container">
+        <div class="canvas-placeholder">
+          <svg viewBox="0 0 80 80" fill="none"><rect x="10" y="10" width="60" height="60" rx="4" stroke="#ddd" stroke-width="2" stroke-dasharray="6 4"/><path d="M30 50l10-12 8 10 5-6 7 8" stroke="#ddd" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="34" r="4" stroke="#ddd" stroke-width="2"/></svg>
+          <p>Cliquez sur un outil pour commencer</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- PAGE MANAGER -->
+  <div class="page-manager">
+    <button class="page-btn active" data-page="1">P.1</button>
+    <button class="page-btn" id="addPage">+</button>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- CONTEXT MENU -->
+  <div class="context-menu" id="contextMenu">
+    <button class="ctx-item" data-action="duplicate">Dupliquer</button>
+    <button class="ctx-item" data-action="bringFront">Premier plan</button>
+    <button class="ctx-item" data-action="sendBack">Arrière plan</button>
+    <div class="ctx-divider"></div>
+    <button class="ctx-item danger" data-action="delete">Supprimer</button>
+  </div>
+
+  <input type="file" id="imageInput" accept="image/*" hidden>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1232 @@
+/* ══════════════════════════════════════
+   LOGIN OVERLAY
+   ══════════════════════════════════════ */
+
+#loginOverlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+#loginOverlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#loginOverlay.hidden {
+  display: none;
+}
+
+.login-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 40px 36px 32px;
+  width: 320px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  animation: loginAppear 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes loginAppear {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.login-logo-icon {
+  font-size: 32px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.login-logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.login-logo-text span {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.login-logo-text strong {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.login-subtitle {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  margin-top: 2px;
+}
+
+.login-field {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.login-field input[type="password"] {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-main);
+  font-size: 14px;
+  color: var(--text-primary);
+  background: white;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  letter-spacing: 0.1em;
+}
+
+.login-field input[type="password"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(26,26,26,0.07);
+}
+
+.login-field input[type="password"].shake {
+  animation: shake 0.4s ease;
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(229,57,53,0.1);
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
+
+.login-field button {
+  width: 42px;
+  height: 42px;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, transform 0.1s;
+  flex-shrink: 0;
+}
+
+.login-field button svg {
+  width: 18px;
+  height: 18px;
+  stroke: white;
+}
+
+.login-field button:hover  { background: #333; }
+.login-field button:active { transform: scale(0.95); }
+
+.login-error {
+  font-size: 12px;
+  color: var(--danger);
+  margin-top: 10px;
+  min-height: 16px;
+  font-weight: 500;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.login-error.visible { opacity: 1; }
+
+/* ══════════════════════════════════════
+   WEBTOON STUDIO — style.css
+   Aesthetic: Clean Editorial Minimalism
+   ══════════════════════════════════════ */
+
+:root {
+  --sidebar-w: 200px;
+  --prop-w: 220px;
+  --accent: #1a1a1a;
+  --accent-light: #f0f0f0;
+  --border: #e5e5e5;
+  --border-mid: #d0d0d0;
+  --text-primary: #1a1a1a;
+  --text-secondary: #888;
+  --bg-main: #f7f7f5;
+  --canvas-bg: #ffffff;
+  --danger: #e53935;
+  --export-accent: #2563eb;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --radius: 6px;
+  --font-main: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-main);
+  background: var(--bg-main);
+  color: var(--text-primary);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  font-size: 13px;
+}
+
+/* ─── SIDEBAR ─────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  background: var(--canvas-bg);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 50;
+  height: 100vh;
+  padding-bottom: 12px;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 16px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.logo-icon {
+  font-size: 22px;
+  color: var(--accent);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: var(--text-secondary);
+  letter-spacing: 0.01em;
+}
+
+.logo-text strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.sidebar-section {
+  padding: 10px 10px 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-label {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  padding: 0 4px;
+}
+
+/* ─── TOOL BUTTONS ───────────────────── */
+.tool-btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 10px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: 12.5px;
+  font-weight: 400;
+  text-align: left;
+  transition: background 0.12s, color 0.12s;
+  margin-bottom: 2px;
+}
+
+.tool-btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  transition: stroke 0.12s;
+}
+
+.tool-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+.tool-btn.active {
+  background: var(--accent);
+  color: white;
+}
+
+.tool-btn.active svg { stroke: white; }
+
+.tool-btn.danger:hover {
+  background: #fef2f2;
+  color: var(--danger);
+}
+
+.tool-btn.export:hover {
+  background: #eff6ff;
+  color: var(--export-accent);
+}
+
+/* ─── BUBBLE STYLES ──────────────────── */
+.bubble-styles {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+}
+
+.bubble-style-btn {
+  padding: 5px 4px 3px;
+  background: var(--accent-light);
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.bubble-style-btn svg {
+  width: 34px;
+  height: 26px;
+  stroke: #666;
+  overflow: visible;
+}
+
+.bubble-style-btn span {
+  font-size: 9px;
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  letter-spacing: 0.01em;
+}
+
+.bubble-style-btn:hover { background: #e8e8e8; }
+.bubble-style-btn.active {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+.bubble-style-btn.active svg { stroke: var(--accent); }
+.bubble-style-btn.active span { color: var(--accent); }
+
+/* Tail direction in properties panel */
+.tail-prop-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  flex-wrap: unset;
+}
+
+.tail-prop-btn {
+  width: 28px;
+  height: 28px;
+  background: var(--accent-light);
+  border: 2px solid transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s, border-color 0.12s;
+}
+
+.tail-prop-btn:hover { background: #e8e8e8; }
+.tail-prop-btn.active {
+  border-color: var(--accent);
+  background: white;
+}
+
+/* ─── ZOOM CONTROL ───────────────────── */
+.zoom-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 4px 8px;
+}
+
+.zoom-btn {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.zoom-btn:hover { background: var(--accent-light); border-color: var(--border-mid); }
+
+.zoom-value {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ─── SIDEBAR BOTTOM ─────────────────── */
+.sidebar-bottom {
+  margin-top: auto;
+  padding: 12px 14px;
+}
+
+.supabase-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fbbf24;
+  flex-shrink: 0;
+}
+
+.status-dot.connected { background: #22c55e; }
+.status-dot.error { background: var(--danger); }
+
+/* ─── PROPERTIES PANEL ───────────────── */
+.properties-panel {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  width: var(--prop-w);
+  background: white;
+  border-left: 1px solid var(--border);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.2s ease;
+  box-shadow: var(--shadow-md);
+}
+
+.properties-panel.visible {
+  transform: translateX(0);
+}
+
+.prop-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.prop-close {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: var(--accent-light);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: background 0.12s;
+}
+
+.prop-close:hover { background: var(--border); color: var(--text-primary); }
+
+.prop-body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.prop-group label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.prop-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prop-row input[type="range"] {
+  flex: 1;
+  height: 3px;
+  -webkit-appearance: none;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.prop-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px var(--border-mid);
+}
+
+.prop-val {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  width: 35px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.prop-row input[type="color"] {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px;
+  cursor: pointer;
+  background: white;
+}
+
+.prop-row select {
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: white;
+  font-family: var(--font-main);
+  font-size: 12px;
+  color: var(--text-primary);
+  cursor: pointer;
+  outline: none;
+}
+
+.prop-row select:focus { border-color: var(--border-mid); }
+
+.z-btn {
+  flex: 1;
+  padding: 5px 8px;
+  background: var(--accent-light);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: var(--font-main);
+  font-size: 11px;
+  color: var(--text-primary);
+  transition: background 0.12s;
+}
+
+.z-btn:hover { background: var(--border); }
+
+/* ─── MAIN AREA ──────────────────────── */
+.main-area {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: scroll;   /* always show scrollbar so layout is stable */
+  overflow-x: auto;
+  padding: 32px;
+  background: var(--bg-main);
+  scroll-behavior: smooth;
+}
+
+/* Prominent custom scrollbar for the main canvas area */
+.main-area::-webkit-scrollbar {
+  width: 10px;
+}
+.main-area::-webkit-scrollbar-track {
+  background: var(--border);
+  border-radius: 8px;
+  margin: 8px 0;
+}
+.main-area::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  border-radius: 8px;
+  border: 2px solid var(--bg-main);
+  transition: background 0.2s;
+}
+.main-area::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+.canvas-wrapper {
+  transform-origin: top center;
+  transition: transform 0.15s ease;
+  /* Ensures the wrapper grows with canvas height so scrollbar is active */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#webtoon-container {
+  position: relative;
+  width: 800px;
+  height: 1200px; /* default tall canvas, user can resize with handle */
+  background: var(--canvas-bg);
+  box-shadow: var(--shadow-lg), 0 0 0 1px var(--border);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Canvas resize handle at the bottom */
+.canvas-resize-handle {
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 12px;
+  cursor: ns-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+}
+
+.canvas-resize-handle::before {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: var(--border-mid);
+  border-radius: 3px;
+  transition: background 0.15s, width 0.15s;
+}
+
+.canvas-resize-handle:hover::before {
+  background: #2563eb;
+  width: 80px;
+}
+
+.canvas-height-label {
+  position: absolute;
+  bottom: -30px;
+  right: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.canvas-height-label.visible { opacity: 1; }
+
+/* Grid overlay */
+#webtoon-container.grid-on {
+  background-image:
+    linear-gradient(to right, #e8e8e8 1px, transparent 1px),
+    linear-gradient(to bottom, #e8e8e8 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.canvas-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  pointer-events: none;
+}
+
+.canvas-placeholder svg {
+  width: 80px;
+  height: 80px;
+  opacity: 0.6;
+}
+
+.canvas-placeholder p {
+  color: #ccc;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+}
+
+/* ─── CANVAS ELEMENTS ────────────────── */
+
+/* Text bubble — SVG background approach */
+.text-bubble {
+  position: absolute;
+  min-width: 120px;
+  min-height: 60px;
+  padding: 14px 18px;
+  background: transparent;
+  border: none;
+  cursor: move;
+  font-family: var(--font-main);
+  font-size: 14px;
+  line-height: 1.45;
+  z-index: 10;
+  user-select: none;
+  transition: box-shadow 0.12s;
+  word-break: break-word;
+  box-sizing: border-box;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* SVG background sits behind text */
+.text-bubble .bubble-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.text-bubble .bubble-text-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  outline: none;
+}
+
+.text-bubble.locked {
+  opacity: 0.85;
+  cursor: default;
+}
+
+.text-bubble.locked .bubble-svg { opacity: 0.7; }
+
+.text-bubble.editing {
+  cursor: text;
+  user-select: text;
+}
+
+.text-bubble.selected,
+.image-block.selected,
+.panel-block.selected,
+.plain-text-block.selected {
+  outline: 1.5px dashed rgba(37, 99, 235, 0.5);
+  outline-offset: 3px;
+  box-shadow: var(--shadow-md);
+}
+
+.text-bubble.locked {
+  border-style: dashed;
+  opacity: 0.85;
+  cursor: default;
+}
+
+.text-bubble.editing {
+  cursor: text;
+  user-select: text;
+}
+
+/* Image block */
+.image-block {
+  position: absolute;
+  overflow: visible;
+  border-radius: 2px;
+  cursor: move;
+  z-index: 10;
+  transition: box-shadow 0.12s;
+}
+
+.image-block img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  display: block;
+  border-radius: 2px;
+}
+
+/* Panel block */
+.panel-block {
+  position: absolute;
+  background: white;
+  border: 2px solid var(--text-primary);
+  overflow: visible; /* allow lock + resize handles outside bounds */
+  cursor: move;
+  border-radius: 3px;
+  z-index: 5;
+  transition: box-shadow 0.12s;
+}
+
+
+/* ─── RESIZE HANDLES ─────────────────── */
+.resize-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border: 2px solid #2563eb;
+  border-radius: 50%;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  /* NO transition — instant show/hide avoids flicker */
+}
+
+.selected .resize-handle {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.resize-handle:hover {
+  background: #2563eb;
+}
+
+.resize-handle.nw { top: -5px;  left: -5px;  cursor: nw-resize; }
+.resize-handle.n  { top: -5px;  left: calc(50% - 4px); cursor: n-resize; }
+.resize-handle.ne { top: -5px;  right: -5px; cursor: ne-resize; }
+.resize-handle.e  { top: calc(50% - 4px); right: -5px; cursor: e-resize; }
+.resize-handle.se { bottom: -5px; right: -5px; cursor: se-resize; }
+.resize-handle.s  { bottom: -5px; left: calc(50% - 4px); cursor: s-resize; }
+.resize-handle.sw { bottom: -5px; left: -5px; cursor: sw-resize; }
+.resize-handle.w  { top: calc(50% - 4px); left: -5px; cursor: w-resize; }
+
+
+
+
+/* ─── ARROW ELEMENT ──────────────────── */
+.arrow-block {
+  position: absolute;
+  cursor: move;
+  z-index: 15;
+  /* no background, purely SVG */
+  transform-origin: center center;
+}
+
+.arrow-block svg.arrow-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+}
+
+.arrow-block.selected {
+  filter: drop-shadow(0 0 3px rgba(37,99,235,0.7));
+}
+
+
+/* ─── ROTATION HANDLE ────────────────── */
+.rotate-handle {
+  position: absolute;
+  top: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 22px;
+  background: white;
+  border: 2px solid #2563eb;
+  border-radius: 50%;
+  cursor: grab;
+  z-index: 103;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  font-size: 12px;
+  line-height: 1;
+  color: #2563eb;
+  user-select: none;
+}
+
+/* Connecting line between rotate handle and element */
+.rotate-handle::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.5px;
+  height: 10px;
+  background: #2563eb;
+  opacity: 0.5;
+}
+
+.selected .rotate-handle {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.rotate-handle:hover {
+  background: #2563eb;
+  color: white;
+}
+
+.rotate-handle:active { cursor: grabbing; }
+
+
+/* ─── PLAIN TEXT BLOCK ───────────────── */
+.plain-text-block {
+  position: absolute;
+  width: 160px;
+  height: 40px;
+  padding: 4px 8px;
+  background: transparent;
+  border: none;
+  cursor: move;
+  z-index: 10;
+  user-select: none;
+  overflow: visible;
+}
+.plain-text-block .bubble-text-content {
+  font-size: 16px;
+  line-height: 1.4;
+  color: #1a1a1a;
+  word-break: break-word;
+  white-space: pre-wrap;
+  outline: none;
+  width: 100%;
+  min-height: 100%;
+}
+
+.plain-text-block.editing {
+  cursor: text;
+  user-select: text;
+}
+
+.plain-text-block.selected {
+  box-shadow: 0 0 0 1.5px rgba(37, 99, 235, 0.45);
+  border-radius: 3px;
+}
+
+.plain-text-block.locked {
+  opacity: 0.85;
+  cursor: default;
+}
+
+/* ── FLOATING LOCK BUTTON ─────────────────────────────────
+   Positionné sur le canvas (pas dans l'élément) — évite tous
+   les conflits hover/overflow/z-index.                       */
+.el-lock-float {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 7px;
+  background: var(--accent);
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.22);
+  line-height: 1;
+  transition: transform 0.1s, background 0.1s;
+  pointer-events: all;
+  user-select: none;
+}
+.el-lock-float:hover { transform: scale(1.12); }
+.el-lock-float:active { transform: scale(0.96); }
+
+/* Marquee selection rectangle */
+#marquee {
+  position: absolute;
+  border: 1.5px solid #2563eb;
+  background: rgba(37, 99, 235, 0.08);
+  border-radius: 2px;
+  pointer-events: none;
+  display: none;
+  z-index: 999;
+}
+
+/* Multi-selected elements */
+.multi-selected {
+  box-shadow: 0 0 0 2px #2563eb, var(--shadow-md) !important;
+}
+
+/* ─── PAGE MANAGER ───────────────────── */
+.page-manager {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 5px 10px;
+  box-shadow: var(--shadow-md);
+  z-index: 60;
+}
+
+.page-btn {
+  width: 34px;
+  height: 28px;
+  border: 1px solid var(--border);
+  background: transparent;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.page-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.page-btn:not(.active):hover {
+  background: var(--accent-light);
+  color: var(--text-primary);
+}
+
+#addPage {
+  width: 28px;
+  height: 28px;
+  border-style: dashed;
+  font-size: 16px;
+}
+
+/* ─── TOAST ──────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--accent);
+  color: white;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 300;
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ─── CONTEXT MENU ───────────────────── */
+.context-menu {
+  position: fixed;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  display: none;
+  min-width: 150px;
+  animation: ctxFadeIn 0.12s ease;
+}
+
+.context-menu.visible { display: block; }
+
+@keyframes ctxFadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.ctx-item {
+  display: block;
+  width: 100%;
+  padding: 7px 12px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-family: var(--font-main);
+  font-size: 12.5px;
+  color: var(--text-primary);
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.1s;
+}
+
+.ctx-item:hover { background: var(--accent-light); }
+.ctx-item.danger { color: var(--danger); }
+.ctx-item.danger:hover { background: #fef2f2; }
+
+.ctx-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+
+/* ─── FONT PICKER ────────────────────── */
+.font-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.font-picker::-webkit-scrollbar { width: 3px; }
+.font-picker::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 2px; }
+
+.font-btn {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  background: var(--accent-light);
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.font-btn:hover { background: #e8e8e8; }
+
+.font-btn.active {
+  border-color: var(--accent);
+  background: white;
+}
+
+.font-preview {
+  font-size: 20px;
+  line-height: 1;
+  color: var(--text-primary);
+  display: block;
+  text-align: center;
+}
+
+.font-name {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: inherit; /* uses the button's font-family set inline */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+/* Each font-btn renders its own name in its own font */
+.font-btn .font-preview,
+.font-btn .font-name {
+  font-family: inherit;
+}
+
+.font-tag {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: var(--border);
+  border-radius: 3px;
+  padding: 1px 4px;
+  white-space: nowrap;
+  font-family: var(--font-main);
+  flex-shrink: 0;
+}
+
+.font-btn.active .font-tag {
+  background: var(--accent);
+  color: white;
+}
+
+/* ─── SCROLLBAR ──────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #bbb; }
+
+/* ─── ANIMATIONS ─────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.text-bubble, .image-block, .panel-block {
+  animation: fadeIn 0.15s ease;
+}
+
+/* ─── RESPONSIVE ─────────────────────── */
+@media (max-width: 768px) {
+  .sidebar { width: 60px; }
+  .sidebar-label, .tool-btn span, .logo-text, .supabase-status .status-text { display: none; }
+  .tool-btn { justify-content: center; padding: 10px; }
+  .logo-icon { font-size: 20px; }
+  .sidebar-logo { justify-content: center; }
+  .zoom-value { display: none; }
+  .bubble-styles { grid-template-columns: 1fr; }
+}
