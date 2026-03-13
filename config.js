@@ -26,7 +26,7 @@ const CONFIG = {
   // ── SUPABASE ──────────────────────────────────────────────────
   // Renseigne ces deux valeurs depuis ton dashboard Supabase :
   // https://app.supabase.com → Settings → API
-  SUPABASE_URL:  'https://rlspxgjjrnxwxydufep.supabase.co',
+  SUPABASE_URL:  'https://rlspxgjjrynxwxydufep.supabase.co',
   SUPABASE_KEY:  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsc3B4Z2pqcnlueHd4eWR1ZmVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzMDI2ODAsImV4cCI6MjA4Nzg3ODY4MH0.Lr-mtfvUclaBMlk1NFQFikHbrrxwHLExZMHw37aMPgY',
   STORAGE_BUCKET: 'webtoon-images',  // nom du bucket à créer dans Supabase Storage
 
