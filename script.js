@@ -89,13 +89,14 @@ async function savePageToSupabase(pageNumber, htmlContent) {
 /* ─── LOAD PAGES FROM SUPABASE ───────── */
 async function loadPagesFromSupabase() {
   if (!sbClient) return
+  state.loading = true
   const { data, error } = await sbClient
     .from('pages')
     .select('page_number, content')
     .eq('project_name', 'default')
     .order('page_number')
   if (error) { console.error('Load error:', error); return }
-  if (!data?.length) return
+  if (!data?.length) { state.loading = false; return }
 
   data.forEach(row => {
     state.pages[row.page_number] = row.content
@@ -117,6 +118,7 @@ async function loadPagesFromSupabase() {
 
   // Load first page
   switchToPage(data[0].page_number)
+  state.loading = false
   showToast('Projet chargé ✓')
 }
 
@@ -149,6 +151,7 @@ const state = {
   zCounter: 10,
   currentPage: 1,
   pages: {},
+  loading: false,  // true during Supabase load — blocks auto-save
 }
 
 /* DOM */
@@ -167,11 +170,13 @@ function saveHistory() {
   state.history.push(container.innerHTML); state.future = []
   if (state.history.length > 50) state.history.shift()
   state.pages[state.currentPage] = container.innerHTML
-  // Debounced auto-save to Supabase
-  clearTimeout(saveHistory._t)
-  saveHistory._t = setTimeout(() => {
-    savePageToSupabase(state.currentPage, container.innerHTML)
-  }, 1500)
+  // Debounced auto-save to Supabase (blocked during initial load)
+  if (!state.loading) {
+    clearTimeout(saveHistory._t)
+    saveHistory._t = setTimeout(() => {
+      savePageToSupabase(state.currentPage, container.innerHTML)
+    }, 1500)
+  }
 }
 function removePlaceholder() {
   const ph = container.querySelector('.canvas-placeholder'); if (ph) ph.remove()
@@ -860,6 +865,6 @@ initSupabase()
 loadPagesFromSupabase()
 
 /* ─── INIT ───────────────────────────── */
-state.pages[1]=container.innerHTML
-saveHistory()
+state.pages[1] = container.innerHTML
+// Don't saveHistory on init — Supabase load will handle restoring content
 showToast('Webtoon Studio prêt ✦', 2500)
