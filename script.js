@@ -116,8 +116,16 @@ async function loadPagesFromSupabase() {
     }
   })
 
-  // Load first page
-  switchToPage(data[0].page_number)
+  // Load first page directly (switchToPage skips if already on page 1)
+  const firstPage = data[0]
+  if (firstPage.page_number === state.currentPage) {
+    container.innerHTML = firstPage.content
+    rebindElements()
+    deselectAll()
+    hideLock()
+  } else {
+    switchToPage(firstPage.page_number)
+  }
   state.loading = false
   showToast('Projet chargé ✓')
 }
