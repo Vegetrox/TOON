@@ -21,7 +21,7 @@ const CONFIG = {
   // ── MOT DE PASSE ──────────────────────────────────────────────
   // Hash SHA-256 du mot de passe (mot de passe actuel : WebtoonStudio2025)
   // Remplace cette valeur par le hash de ton propre mot de passe.
-  PASSWORD_HASH: '55ba43ab05dd8b83027761adff561ad8e4f2ca4790d315e038ab55b83f39186d',
+  PASSWORD_HASH: '89cd62c4309394317d8e7435f893d4bf928b28e5aa56f42176b6549df21905a9',
 
   // ── SUPABASE ──────────────────────────────────────────────────
   // Renseigne ces deux valeurs depuis ton dashboard Supabase :
