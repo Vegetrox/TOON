@@ -41,15 +41,15 @@ checkLogin()
    ══════════════════════════════════════ */
 
 /* ─── SUPABASE CLIENT ────────────────── */
-let supabase = null
+let sbClient = null
 let sbStorage = null
 
 function initSupabase() {
   const cfg = window.__WS_CONFIG
   if (!cfg?.SUPABASE_URL || !cfg?.SUPABASE_KEY) return
   try {
-    supabase  = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_KEY)
-    sbStorage = supabase.storage.from(cfg.STORAGE_BUCKET || 'webtoon-images')
+    sbClient = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_KEY)
+    sbStorage = sbClient.storage.from(cfg.STORAGE_BUCKET || 'webtoon-images')
     updateSupabaseStatus(true)
   } catch(e) {
     console.error('Supabase init error:', e)
@@ -72,10 +72,10 @@ function updateSupabaseStatus(connected) {
 
 /* ─── SAVE PAGE TO SUPABASE ──────────── */
 async function savePageToSupabase(pageNumber, htmlContent) {
-  if (!supabase) return
+  if (!sbClient) return
   const projectName = 'default'
   // Clean base64 images from content before saving — store URLs only
-  const { error } = await supabase
+  const { error } = await sbClient
     .from('pages')
     .upsert({
       project_name: projectName,
@@ -88,8 +88,8 @@ async function savePageToSupabase(pageNumber, htmlContent) {
 
 /* ─── LOAD PAGES FROM SUPABASE ───────── */
 async function loadPagesFromSupabase() {
-  if (!supabase) return
-  const { data, error } = await supabase
+  if (!sbClient) return
+  const { data, error } = await sbClient
     .from('pages')
     .select('page_number, content')
     .eq('project_name', 'default')
@@ -122,14 +122,14 @@ async function loadPagesFromSupabase() {
 
 /* ─── UPLOAD IMAGE TO SUPABASE ───────── */
 async function uploadImageToSupabase(file) {
-  if (!supabase) return null
+  if (!sbClient) return null
   const ext  = file.name.split('.').pop()
   const name = `${Date.now()}.${ext}`
-  const { error } = await supabase.storage
+  const { error } = await sbClient.storage
     .from(window.__WS_CONFIG.STORAGE_BUCKET || 'webtoon-images')
     .upload(name, file, { cacheControl: '3600', upsert: false })
   if (error) { showToast('Erreur upload image'); console.error(error); return null }
-  const { data } = supabase.storage
+  const { data } = sbClient.storage
     .from(window.__WS_CONFIG.STORAGE_BUCKET || 'webtoon-images')
     .getPublicUrl(name)
   return data.publicUrl
@@ -640,7 +640,7 @@ document.getElementById('imageInput').onchange = async e => {
   }
 
   // Try Supabase upload first (stores URL, not base64 — much lighter)
-  if (supabase) {
+  if (sbClient) {
     showToast('Upload en cours…', 3000)
     const url = await uploadImageToSupabase(file)
     if (url) { createImageEl(url); showToast('Image importée ✓'); return }
