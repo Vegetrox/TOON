@@ -284,41 +284,25 @@ function buildBubbleSVG(style, fill, stroke) {
   // Forme ovoïde légèrement irrégulière — plus vivante qu'une ellipse pure.
   // Path tracé manuellement : 4 points cardinaux + handles Bézier ajustés
   // pour donner un léger ventre en haut et un bas plus aplati.
+  // vector-effect="non-scaling-stroke" keeps stroke uniform regardless of stretch
   if (style === 'round') {
     return `<svg class="bubble-svg" viewBox="0 0 100 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="
-        M 50,3
-        C 72,3  97,12  97,30
-        C 97,48  74,57  50,57
-        C 26,57   3,48   3,30
-        C  3,12  28, 3  50, 3
-        Z
-      " fill="${f}" stroke="${s}" stroke-width="${sw}" stroke-linejoin="round"/>
+      <path d="M 50,3 C 72,3 97,12 97,30 C 97,48 74,57 50,57 C 26,57 3,48 3,30 C 3,12 28,3 50,3 Z"
+        fill="${f}" stroke="${s}" stroke-width="${sw}" vector-effect="non-scaling-stroke"/>
     </svg>`
   }
 
-  // ── RECTANGLE ARRONDI ────────────────────────────────────────────────
-  // Coins arrondis asymétriques — légèrement plus ronds en haut qu'en bas
-  // pour un look BD naturel. Path tracé point par point.
   if (style === 'rect') {
     return `<svg class="bubble-svg" viewBox="0 0 100 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="
-        M 14,3
-        C  5,3   3,5   3,13
-        L  3,47
-        C  3,55   5,57  14,57
-        L 86,57
-        C 95,57  97,55  97,47
-        L 97,13
-        C 97, 5  95, 3  86, 3
-        Z
-      " fill="${f}" stroke="${s}" stroke-width="${sw}" stroke-linejoin="round"/>
+      <path d="M 14,3 C 5,3 3,5 3,13 L 3,47 C 3,55 5,57 14,57 L 86,57 C 95,57 97,55 97,47 L 97,13 C 97,5 95,3 86,3 Z"
+        fill="${f}" stroke="${s}" stroke-width="${sw}" vector-effect="non-scaling-stroke"/>
     </svg>`
   }
 
   // Fallback ronde
   return `<svg class="bubble-svg" viewBox="0 0 100 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M 50,3 C 72,3 97,12 97,30 C 97,48 74,57 50,57 C 26,57 3,48 3,30 C 3,12 28,3 50,3 Z" fill="${f}" stroke="${s}" stroke-width="${sw}"/>
+    <path d="M 50,3 C 72,3 97,12 97,30 C 97,48 74,57 50,57 C 26,57 3,48 3,30 C 3,12 28,3 50,3 Z"
+      fill="${f}" stroke="${s}" stroke-width="${sw}" vector-effect="non-scaling-stroke"/>
   </svg>`
 }
 
@@ -448,11 +432,11 @@ function makeInteractive(el) {
       didMove = true; el.style.cursor='grabbing'
       let nl=sl+dx, nt=st+dy
       if(state.gridOn){nl=getSnapped(nl);nt=getSnapped(nt)}
-      el.style.left=Math.max(0,nl)+'px'; el.style.top=Math.max(0,nt)+'px'
+      el.style.left=nl+'px'; el.style.top=Math.max(0,nt)+'px'
       multiStarts.forEach(ms=>{
         let ml=ms.l+dx,mt=ms.t+dy
         if(state.gridOn){ml=getSnapped(ml);mt=getSnapped(mt)}
-        ms.el.style.left=Math.max(0,ml)+'px'; ms.el.style.top=Math.max(0,mt)+'px'
+        ms.el.style.left=ml+'px'; ms.el.style.top=Math.max(0,mt)+'px'
       })
       updateLockPosition()
     }
@@ -588,7 +572,7 @@ document.getElementById('addText').onclick = () => {
   const el = document.createElement('div')
   el.className = 'plain-text-block'
   el.dataset.fontFamily = 'DM Sans'
-  el.style.cssText = `top:80px;left:80px;width:160px;height:40px;z-index:${++state.zCounter}`
+  el.style.cssText = `top:${80+Math.random()*60|0}px;left:-200px;width:160px;height:40px;z-index:${++state.zCounter}`
 
   const td = document.createElement('div')
   td.className = 'bubble-text-content'
@@ -615,7 +599,7 @@ document.getElementById('addBubble').onclick = () => {
   el.dataset.fillColor   = '#ffffff'
   el.dataset.strokeColor = '#1a1a1a'
   el.dataset.fontFamily  = 'DM Sans'
-  el.style.cssText = `top:80px;left:80px;width:180px;height:100px;z-index:${++state.zCounter}`
+  el.style.cssText = `top:${80+Math.random()*60|0}px;left:-220px;width:180px;height:100px;z-index:${++state.zCounter}`
 
   const td = document.createElement('div')
   td.className = 'bubble-text-content'
@@ -643,7 +627,7 @@ document.getElementById('imageInput').onchange = async e => {
   function createImageEl(src) {
     const el=document.createElement('div')
     el.className='image-block'
-    el.style.cssText=`width:220px;height:220px;top:80px;left:80px;z-index:${++state.zCounter}`
+    el.style.cssText=`width:220px;height:220px;top:${60+Math.random()*60|0}px;left:-260px;z-index:${++state.zCounter}`
     const img=document.createElement('img'); img.src=src; img.draggable=false
     el.appendChild(img)
     addResizeHandles(el)
@@ -669,7 +653,7 @@ document.getElementById('addPanel').onclick = () => {
   removePlaceholder(); saveHistory()
   const el=document.createElement('div')
   el.className='panel-block'
-  el.style.cssText='width:280px;height:200px;top:80px;left:80px;z-index:1'
+  el.style.cssText='width:280px;height:200px;top:80px;left:-320px;z-index:1'
   container.querySelectorAll('.text-bubble,.image-block,.plain-text-block').forEach(e=>{
     e.style.zIndex=(parseInt(e.style.zIndex)||10)+1
   })
